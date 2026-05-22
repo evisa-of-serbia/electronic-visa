@@ -135,56 +135,56 @@
                     <div class="col-8">
                         <div class="data-row">
                             <div class="data-label">Surname</div>
-                            <div class="data-value">FAISAL</div>
+                            <div class="data-value" id="res-surname"></div>
                         </div>
                         <div class="data-row">
                             <div class="data-label">Name</div>
-                            <div class="data-value">IQBAL</div>
+                            <div class="data-value" id="res-name"></div>
                         </div>
                     </div>
                     <div class="col-4 text-end">
-                        <img src="images/faisal-iqbal.jpeg" alt="Applicant Photo" class="applicant-photo">
+                        <img src="" id="res-photo" alt="Applicant Photo" class="applicant-photo">
                     </div>
                 </div>
 
                 <div class="data-row">
                     <div class="data-label">DOB</div>
-                    <div class="data-value">04/05/2002</div>
+                    <div class="data-value" id="res-dob"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Gender</div>
-                    <div class="data-value">MALE</div>
+                    <div class="data-value" id="res-gender"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Nationality</div>
-                    <div class="data-value">PAKISTANI</div>
+                    <div class="data-value" id="res-nationality"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Passport</div>
-                    <div class="data-value">YS1339751</div>
+                    <div class="data-value" id="res-passport"></div>
                 </div>
 
                 <div class="section-title">Visa Details</div>
                 
                 <div class="data-row">
                     <div class="data-label">Visa ID</div>
-                    <div class="data-value">DGT402176</div>
+                    <div class="data-value" id="res-visaid"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Validity</div>
-                    <div class="data-value">21/05/2026 - 20/08/2026</div>
+                    <div class="data-value" id="res-validity"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Stay</div>
-                    <div class="data-value">90 Days</div>
+                    <div class="data-value" id="res-stay"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Entries</div>
-                    <div class="data-value">Single Entry</div>
+                    <div class="data-value" id="res-entries"></div>
                 </div>
                 <div class="data-row">
                     <div class="data-label">Approval</div>
-                    <div class="data-value">21/05/2026</div>
+                    <div class="data-value" id="res-approval"></div>
                 </div>
             </div>
         </div>
@@ -194,31 +194,87 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function() {
-            const allowedAppId = "50813-21544-65972";
-            const allowedVerCode = "a74a1182-1526-4416-9d4c-Ja59419";
+            
+            // Multiple Profiles Dataset (No database needed)
+            // Add new items within this object structure to scale up profile records
+            const visaDatabase = {
+                "50912-42144-49935": {
+                    verificationCode: "a14a170-1566-4418-9d3c-Ja56413",
+                    surname: "MUHAMMAD",
+                    name: "KHAN",
+                    dob: "01/01/1991",
+                    gender: "MALE",
+                    nationality: "PAKISTANI",
+                    passport: "LM0154193",
+                    visa_id: "DGT303156",
+                    validity: "27/04/2026 - 26/07/2026",
+                    stay: "90 Days",
+                    entries: "Single Entry",
+                    approval_date: "27/04/2026",
+                    photo: "images/1777009282.png"
+                },
+                "50813-21544-65972": { 
+                    verificationCode: "a74a1182-1526-4416-9d4c-Ja59419", 
+                    surname: "FAISAL",
+                    name: "IQBAL",
+                    dob: "04/05/2002",
+                    gender: "MALE",
+                    nationality: "PAKISTANI",
+                    passport: "YS1339751",
+                    visa_id: "DGT402176",
+                    validity: "21/05/2026 - 20/08/2026",
+                    stay: "90 Days",
+                    entries: "Single Entry",
+                    approval_date: "21/05/2026",
+                    photo: "images/faisal-iqbal.jpeg"
+                }
+            };
 
             $('#visaForm').on('submit', function(e) {
-                e.preventDefault(); // Stop page reload
+                e.preventDefault(); // Stop native browser form submit and page reload
                 
-                // Reset views
+                // Hide past query items immediately
                 $('#error-message').hide();
                 $('#results-container').hide();
                 
                 const inputAppId = $('#application_id').val().trim();
                 const inputVerCode = $('#verification_code').val().trim();
 
-                // Show button processing state
+                // Trigger processing visual transitions
                 $('.btn-verify').prop('disabled', true).text('Processing...');
                 $('#loading-spinner').show();
 
-                // Fake network delay simulation
+                // Artificial network latency loop simulation
                 setTimeout(function() {
-                    // Reset button
                     $('.btn-verify').prop('disabled', false).text('Verify Visa');
                     $('#loading-spinner').hide();
 
-                    if (inputAppId === allowedAppId && inputVerCode === allowedVerCode) {
-                        $('#results-container').fadeIn('slow');
+                    // Step 1: Match Application ID against internal keys
+                    if (visaDatabase.hasOwnProperty(inputAppId)) {
+                        const profile = visaDatabase[inputAppId];
+
+                        // Step 2: Validate associated profile security authorization string
+                        if (profile.verificationCode === inputVerCode) {
+                            
+                            // Step 3: Parse and bind targeted properties down to template view markup nodes
+                            $('#res-surname').text(profile.surname);
+                            $('#res-name').text(profile.name);
+                            $('#res-dob').text(profile.dob);
+                            $('#res-gender').text(profile.gender);
+                            $('#res-nationality').text(profile.nationality);
+                            $('#res-passport').text(profile.passport);
+                            $('#res-visaid').text(profile.visa_id);
+                            $('#res-validity').text(profile.validity);
+                            $('#res-stay').text(profile.stay);
+                            $('#res-entries').text(profile.entries);
+                            $('#res-approval').text(profile.approval_date);
+                            $('#res-photo').attr('src', profile.photo);
+
+                            // Disclose complete visual template container node
+                            $('#results-container').fadeIn('slow');
+                        } else {
+                            $('#error-message').fadeIn();
+                        }
                     } else {
                         $('#error-message').fadeIn();
                     }
